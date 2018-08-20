@@ -39,15 +39,8 @@ def input_char(timeout=1):
     signal.signal(signal.SIGALRM, signal.SIG_IGN)
     return ''
 
-def print_screen(level, bd, mario, enemies, objects, scene):
-    os.system('clear')
-    bd.init_board(mario)
+def set_scene(bidi,scene,statics):
     for sc in scene:
-        sc.draw(bd)
-    mario.drawPlayer(bd)
-    for en in enemies:
-        en.drawEnemy(bd)
-    # print ("SCORE: ", mario.score)
-    # print ("TIME LEFT: ", timelimit[level] - mario.play_time(), end=' ')
-    # print ("\t\t\tLIVES: ", mario.lives)
-    bd.render(mario, enemies)
+        sc.draw()
+    for obj in statics:
+        obj.draw()

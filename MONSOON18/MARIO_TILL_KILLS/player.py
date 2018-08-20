@@ -4,6 +4,7 @@ import time
 import enemy
 from person import *
 import enemy
+import config
 #from colorama import Back ,Fore ,Style
 #pylint: disable-msg=R0913
 
@@ -30,7 +31,7 @@ class Mario(Person):
     ''' 
         ENEMIES ALSO MOVE WHILE THE PLAYER JUMPS , SO ACCORDINGLY THE CODE
     '''
-    def jump(self , bidi , prev,en,playboy,dooms):
+    def jump(self , bidi , prev,en,playboy,dooms,scene,statics):
         
         speedx = 4
         speedy = 1
@@ -63,6 +64,7 @@ class Mario(Person):
                 self.yc = self.yc + speedy
 
             bidi.initialize()
+            config.set_scene(bidi,scene,statics)        
             bidi.set_score(playboy)
             self.set_player(self.xc,self.yc)
             for enemy in en:
