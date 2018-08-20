@@ -120,13 +120,13 @@ class Board:
                 elif(screen[i][j]=='M'):
                     print("\033[1;36;40m" +screen[i][j],end =' ')
                 elif(screen[i][j]=='c'):
-                    print("\033[1;35;40m" +screen[i][j],end =' ')
+                    print("\033[1;34;40m" +screen[i][j],end =' ')
                 elif(screen[i][j]=='e'):
                     print("\033[1;31;40m" +screen[i][j],end =' ')
                 elif(screen[i][j]=='+' or screen[i][j]=='/' or screen[i][j]=='\\' or screen[i][j]=='_'):
                     print("\033[1;37;40m" +screen[i][j],end =' ')
-                elif(screen[i][j]=='e'):
-                    print("\033[1;31;40m" +screen[i][j],end =' ')
+                elif(screen[i][j]=='X'):
+                    print("\033[1;33;40m" +screen[i][j],end =' ')
                 else:
                     print(screen[i][j],end =' ')
             print()

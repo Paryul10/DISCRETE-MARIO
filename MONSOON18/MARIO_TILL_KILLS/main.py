@@ -6,7 +6,7 @@ import enemy
 import config
 import objects
 
-height = 30
+height = 40
 width = 60
 bidi = board.Board(height,width)
 playboy = player.Mario(height-6,6,1)
@@ -170,7 +170,7 @@ while(True):
             spawn_enemy()
         for eni in en:
             eni.move_enemy(eni.xc,eni.yc,playboy.yc)
-            #playboy.check_player_alive(dooms,bidi)
+            playboy.check_player_alive(dooms,bidi)
             chk = eni.check_enemy_alive(playboy)
             if(chk):
                 en.remove(eni)
