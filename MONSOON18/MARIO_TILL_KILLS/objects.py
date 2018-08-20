@@ -97,7 +97,30 @@ class Bricks(Objects):
             for j in range(self.width):
                 board.screen[self.xc + i][self.yc + j] = 'X'
 
+class Pipe(Objects):
+    def __init__(self, xc, yc, l, w):
+        Objects.__init__(self, xc, yc, l, w)
 
+    def draw(self):
+        for i in range(self.length):
+            for j in range(self.width):
+                if(j==0 or j==self.width-1):
+                    board.screen[self.xc + i][self.yc + j] = '|'
+                else:
+                    board.screen[self.xc+i][self.yc+j] = '-'
+        for i in range (self.width):
+            board.screen[self.xc-1][self.yc+i] = '_'
+
+class Holes(Objects):
+    def __init__(self, xc, yc, l, w):
+        Objects.__init__(self, xc, yc, l, w)
+
+    def draw(self):
+        for i in range(self.length):
+            for j in range(self.width):
+                board.screen[self.xc + i][self.yc + j] = ' '
+                
     
+                    
     
-     
+                    

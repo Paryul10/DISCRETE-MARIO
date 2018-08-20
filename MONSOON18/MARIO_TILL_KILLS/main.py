@@ -53,15 +53,15 @@ def make_objects():
     br = objects.Bricks(height-12, 40, 2, 8)
     statics.append(br)
 
-    # p = statics.Pipe(height-11, 70, 7, 6)
-    # statics.append(p)
-    # p = statics.Pipe(height-14, 82, 10, 10)
-    # statics.append(p)
-    # p = statics.Pipe(height-22, 98, 18, 8)
-    # statics.append(p)
+    p = objects.Pipe(height-11, 70, 7, 6)
+    statics.append(p)
+    p = objects.Pipe(height-14, 82, 10, 10)
+    statics.append(p)
+    p = objects.Pipe(height-22, 98, 18, 8)
+    statics.append(p)
 
-    # h = statics.statics(height-4, 140, 3, 5)
-    # statics.append(h)
+    h = objects.Holes(height-4, 140, 3, 5)
+    statics.append(h)
     
     br = objects.Bricks(height-12, 160, 2, 6)
     statics.append(br)
@@ -77,8 +77,8 @@ def make_objects():
     statics.append(br)
     br = objects.Bricks(height-14, 208, 2, 2)
     statics.append(br)
-    # h = statics.statics(height-4, 210, 3, 5)
-    # statics.append(h)
+    h = objects.Holes(height-4, 210, 3, 5)
+    statics.append(h)
     br = objects.Bricks(height-14, 215, 2, 2)
     statics.append(br)
     br = objects.Bricks(height-12, 215, 2, 4)
@@ -97,13 +97,12 @@ def make_objects():
     br = objects.Bricks(height-14, 276, 2, 8)
     statics.append(br)
 
-    # p = statics.Pipe(height-11, 290, 7, 8)
-    # statics.append(p)
-    # p = statics.Pipe(height-11, 303, 7, 8)
-    # statics.append(p)
-    # p = statics.Pipe(height-11, 316, 7, 8)
-    # statics.append(p)
-
+    p = objects.Pipe(height-11, 290, 7, 8)
+    statics.append(p)
+    p = objects.Pipe(height-11, 303, 7, 8)
+    statics.append(p)
+    p = objects.Pipe(height-11, 316, 7, 8)
+    statics.append(p)
 
     br = objects.Bricks(height-6, 330, 2, 20)
     statics.append(br)
@@ -126,8 +125,8 @@ def make_objects():
     br = objects.Bricks(height-24, 348, 2, 2)
     statics.append(br)
 
-    # f = statics.Pipe(height-28, 357, 24, 1)
-    # statics.append(f)
+    f = objects.Pipe(height-28,     357, 24, 1)
+    statics.append(f)
 
 ##########################-------------------SPAWNS-ENEMY WHEN CALLED--------------------------######################
 def spawn_enemy():
@@ -170,7 +169,7 @@ while(True):
             spawn_enemy()
         for eni in en:
             eni.move_enemy(eni.xc,eni.yc,playboy.yc)
-            playboy.check_player_alive(dooms,bidi)
+            #playboy.check_player_alive(dooms,bidi)
             chk = eni.check_enemy_alive(playboy)
             if(chk):
                 en.remove(eni)

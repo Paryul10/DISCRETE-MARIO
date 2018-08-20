@@ -23,56 +23,15 @@ class Board:
                 else:
                     screen[i][j]=' '
 
-        # def spawn_clouds(self):
-        #     for cloud in clouds:
-        #         for i in range (cloud.xc,cloud.xc+cloud.l):
-        #             for j in range (cloud.yc,cloud.yc+cloud.w):
-        #                 if i==cloud.xc and j==cloud.yc:
-        #                     screen[i][j]=' '
-        #                 elif i==cloud.xc and j==cloud.yc+cloud.w-1:
-        #                     screen[i][j]=' '
-        #                 elif i==cloud.xc+cloud.l-1 and j==cloud.yc:
-        #                     screen[i][j]=' '
-        #                 elif i==cloud.xc+cloud.l-1 and j==cloud.yc+cloud.w-1:
-        #                     screen[i][j]=' ' 
-        #                 else:
-        #                     screen[i][j]='c'
-                        #cloud =  [ ]
+        
+        screen[self.height-27][356] = '_'
+        screen[self.height-27][355] = '/'
+        screen[self.height-28][356] = '/'
+        screen[self.height-29][357] = '|'
         
         
-        # for i in range (1,6):
-        #     for j in range (6,12):
-        #         if i==1 and j==6:
-        #             screen[i][j]=' '
-        #         elif i==1 and j==11:
-        #             screen[i][j]=' '
-        #         elif i==5 and j==6:
-        #             screen[i][j]=' '
-        #         elif i==5 and j==11:
-        #             screen[i][j]=' ' 
-        #         # elif i==1 or i == 5:
-        #         #     screen[i][j]="c"
-        #         # elif j==6 or j==11:
-        #         #     screen[i][j]='c'
-        #         else:
-        #             screen[i][j]='c'
+        
 
-        # for i in range (3,7):
-        #     for j in range (34,39):
-        #         if i==3 and j==34:
-        #             screen[i][j]=' '
-        #         elif i==3 and j==38:
-        #             screen[i][j]=' '
-        #         elif i==6 and j==34:
-        #             screen[i][j]=' '
-        #         elif i==6 and j==38:
-        #             screen[i][j]=' ' 
-        #         elif i==3 or i == 6:
-        #             screen[i][j]="c"
-        #         elif j==34 or j==38:
-        #             screen[i][j]='c'
-        #         else:
-        #             screen[i][j]='c'
 
     def set_score(self,playboy):
 
