@@ -31,7 +31,7 @@ class Mario(Person):
     ''' 
         ENEMIES ALSO MOVE WHILE THE PLAYER JUMPS , SO ACCORDINGLY THE CODE
     '''
-    def jump(self , bidi , prev,en,playboy,dooms,scene,statics,coins,doi):
+    def jump(self , bidi , prev,en,playboy,dooms,scene,statics,cns,doi):
         
         speedx = 4
         speedy = 1
@@ -39,13 +39,13 @@ class Mario(Person):
 
         start = time.time()
         
-        bidi.initialize()
-        config.set_scene(bidi,scene,statics)
-        config.set_coins(coins)        
-        bidi.set_score(playboy)
-        self.set_player(self.xc,self.yc)
-        os.system('clear')
-        bidi.render(playboy,en)
+        # bidi.initialize()
+        # config.set_scene(bidi,scene,statics)
+        # config.set_coins(cns)        
+        # bidi.set_score(playboy)
+        # self.set_player(self.xc,self.yc)
+        # os.system('clear')
+        # bidi.render(playboy,en)
 
         while(self.xc < self.orgx):
             
@@ -71,10 +71,22 @@ class Mario(Person):
                 self.yc = self.yc - speedy
             elif(prev == 1):
                 self.yc = self.yc + speedy
+            
 
+
+            
+            for i in range(0,2):
+                for j in range(0,2):
+                    x = playboy.xc + i
+                    y = playboy.yc + j
+                    if(board.screen[x][y] == '0'):
+                        playboy.coins = playboy.coins+1
+                        for coin in cns:
+                            if(coin.xc == x and coin.yc == y):
+                                cns.remove(coin)
             bidi.initialize()
             config.set_scene(bidi,scene,statics)
-            config.set_coins(coins)        
+            config.set_coins(cns)        
             bidi.set_score(playboy)
             self.set_player(self.xc,self.yc)
             for enemy in en:
@@ -121,7 +133,7 @@ class Mario(Person):
             self.check_game_over(dooms,doi)
 
     def check_game_over(self,dooms,doi):
-            os.killpg(os.getpgid(doi.pid), signal.SIGTERM)
+            #os.killpg(os.getpgid(doi.pid), signal.SIGTERM)
             os.system('clear')
             print('GAME OVER!!!!!!!!!!!!!!!!!!')
             print('TOTAL_SCORE=',self.score)

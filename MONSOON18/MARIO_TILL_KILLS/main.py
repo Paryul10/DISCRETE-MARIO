@@ -21,55 +21,60 @@ scene = []
 statics = []
 statics_y = []
 en = []
-coins = []
+cns = []
 
 def make_coins():
+    coin = objects.Coins(height-5,21,1,1)
+    cns.append(coin)
+    coin = objects.Coins(height-6,32,1,1)
+    cns.append(coin)
+
     coin = objects.Coins(height-19,32,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-19,33,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-20,54,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-20,52,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-7,79,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-11,141,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-11,142,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-11,143,1,1)
-    coins.append(coin)
+    cns.append(coin)
 
     coin = objects.Coins(height-23,173,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-23,174,1,1)
-    coins.append(coin)
+    cns.append(coin)
     
     coin = objects.Coins(height-18,211,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-18,212,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-18,213,1,1)
-    coins.append(coin)
+    cns.append(coin)
 
     coin = objects.Coins(height-16,294,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-16,307,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-16,320,1,1)
-    coins.append(coin)
+    cns.append(coin)
     
     coin = objects.Coins(height-7,330,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-11,334,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-15,338,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-19,342,1,1)
-    coins.append(coin)
+    cns.append(coin)
     coin = objects.Coins(height-23,346,1,1)
-    coins.append(coin)
+    cns.append(coin)
 
 
 
@@ -202,17 +207,18 @@ make_objects()
 make_coins()
 bidi.initialize()
 config.set_scene(bidi,scene,statics)
-config.set_coins(coins)
+config.set_coins(cns)
 bidi.set_score(playboy)
-os.system('clear')
+#os.system('clear')
 
 prev = -1 
 start = time.time()
 dooms = start
 
 getch = config.GetchUnix()
-doi = subprocess.Popen(['mplayer', 'mario_08.wav'])
-os.system('clear')
+#doi = subprocess.Popen(['mplayer', 'mario_08.wav'])
+doi = 1
+#os.system('clear')
 #os.system("start /home/zegatron/MONSOON18/MARIO_TILL_KILLS/resources/main_theme.ogg")
 time.sleep(2)
 while(True):
@@ -225,7 +231,7 @@ while(True):
             spawn_enemy()
         for eni in en:
             eni.move_enemy(eni.xc,eni.yc,playboy.yc)
-            playboy.check_player_alive(dooms,bidi,doi)
+            #playboy.check_player_alive(dooms,bidi,doi)
             chk = eni.check_enemy_alive(playboy)
             if(chk):
                 en.remove(eni)
@@ -238,7 +244,7 @@ while(True):
 
         bidi.initialize()
         config.set_scene(bidi,scene,statics)
-        config.set_coins(coins)
+        config.set_coins(cns)
         bidi.set_score(playboy)
         playboy.set_player(playboy.xc, playboy.yc)
         for eni in en:
@@ -259,35 +265,36 @@ while(True):
     elif(inp == 'w'):
         #print("w")
         do = subprocess.Popen(['aplay', 'mb_jump.wav'])
-        playboy.jump(bidi,prev,en,playboy,dooms,scene,statics,coins,doi)
+        playboy.jump(bidi,prev,en,playboy,dooms,scene,statics,cns,doi)
         prev = -1
 
     if(inp == 'q'):
         #print("q")
-        os.killpg(os.getpgid(doi.pid), signal.SIGTERM)
+        #os.killpg(os.getpgid(doi.pid), signal.SIGTERM)
         sys.exit(0)
 
-    
+    for i in range(0,2):
+        for j in range(0,2):
+            x = playboy.xc + i
+            y = playboy.yc + j
+            if(board.screen[x][y] == '0'):
+                playboy.coins = playboy.coins+1
+                for coin in cns:
+                    if(coin.xc == x and coin.yc == y):
+                        cns.remove(coin)
 #''' after input the positions change , we need to reset the board , set the new positions of player ,enemy ,, clear screen ,and print board'''
     bidi.initialize()
     config.set_scene(bidi,scene,statics)   
-    config.set_coins(coins)
+    
     bidi.set_score(playboy)
+    config.set_coins(cns)
+    
     playboy.set_player(playboy.xc, playboy.yc)
     for eni in en:
         check = eni.check_enemy_alive(playboy)
         if(check):
             en.remove(eni)
-    # for coin in coins:
-    #     k = coin.check_coin()
-    #     print("k=",k)
-    #     time.sleep(.205)
-    #     print('yes-entered')
-    #     #time.sleep(.05)
-    #     if(k):
-    #         print('yes')
-    #         time.sleep(.05)
-    #         #coins.remove(coin) 
+            
     for eni in en:
         eni.set_enemy(eni.xc, eni.yc)
     os.system('clear')
