@@ -28,10 +28,6 @@ class Board:
         screen[self.height-27][355] = '/'
         screen[self.height-28][356] = '/'
         screen[self.height-29][357] = '|'
-        
-        
-        
-
 
     def set_score(self,playboy):
 

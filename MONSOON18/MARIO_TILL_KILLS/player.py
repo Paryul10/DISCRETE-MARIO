@@ -1,5 +1,5 @@
-import board
-import os ,sys
+import board,signal
+import os ,sys,subprocess
 import time
 import enemy
 from person import *
@@ -31,7 +31,7 @@ class Mario(Person):
     ''' 
         ENEMIES ALSO MOVE WHILE THE PLAYER JUMPS , SO ACCORDINGLY THE CODE
     '''
-    def jump(self , bidi , prev,en,playboy,dooms,scene,statics):
+    def jump(self , bidi , prev,en,playboy,dooms,scene,statics,coins,doi):
         
         speedx = 4
         speedy = 1
@@ -40,6 +40,8 @@ class Mario(Person):
         start = time.time()
         
         bidi.initialize()
+        config.set_scene(bidi,scene,statics)
+        config.set_coins(coins)        
         bidi.set_score(playboy)
         self.set_player(self.xc,self.yc)
         os.system('clear')
@@ -51,10 +53,17 @@ class Mario(Person):
                 start = time.time()
                 for enemy in en:
                     enemy.move_enemy(enemy.xc,enemy.yc, playboy.yc)
-                    self.check_player_alive(dooms,bidi)
-                    chek =enemy.check_enemy_alive(self)
+                    self.check_player_alive(dooms,bidi,doi)
+                    chek = enemy.check_enemy_alive(self)
                     if(chek == 1):
+                        #do = subprocess.Popen(['aplay', 'mb_touch.wav'])                        
                         en.remove(enemy)
+            
+            # for coin in coins:
+            #     k = coin.check_coin()
+            #     if(k):
+            #         coins.remove(coin)
+
             speedx = speedx - 1            
             self.xc = self.xc - speedx
 
@@ -64,7 +73,8 @@ class Mario(Person):
                 self.yc = self.yc + speedy
 
             bidi.initialize()
-            config.set_scene(bidi,scene,statics)        
+            config.set_scene(bidi,scene,statics)
+            config.set_coins(coins)        
             bidi.set_score(playboy)
             self.set_player(self.xc,self.yc)
             for enemy in en:
@@ -84,7 +94,7 @@ class Mario(Person):
             for j in range(0,2):
                 board.screen[xc+i][yc+j] = 'M'
     ######################---------------------------------IS_PLAYER_ALIVE/IS_GAME_OVER--------------########################
-    def check_player_alive(self,dooms,bidi):
+    def check_player_alive(self,dooms,bidi,doi):
         chk = 0
         if(board.screen[self.xc][self.yc] == 'e' and board.screen[self.xc+1][self.yc] == 'e'):
             chk = chk + 1
@@ -92,11 +102,14 @@ class Mario(Person):
             chk = chk + 1
 
         if(chk>=1):
+            #do = subprocess.Popen(['aplay', 'mb_die.wav']) 
+            #os.killpg(os.getpgid(doi.pid), signal.SIGTERM)
+            #doi = subprocess.Popen(['mplayer', 'mario_08.wav'])
             print(self.health)
-            self.reduce_life(dooms,bidi)
+            self.reduce_life(dooms,bidi,doi)
         return
 
-    def reduce_life(self,dooms,bidi):
+    def reduce_life(self,dooms,bidi,doi):
         if(self.health > 0):
             self.health = self.health -1
         if(self.health >0):
@@ -105,9 +118,11 @@ class Mario(Person):
             self.xc = self.orgx 
             self.yc = self.orgy + bidi.left
         elif self.health == 0:
-            self.check_game_over(dooms)
+            self.check_game_over(dooms,doi)
 
-    def check_game_over(self,dooms):
+    def check_game_over(self,dooms,doi):
+            os.killpg(os.getpgid(doi.pid), signal.SIGTERM)
+            os.system('clear')
             print('GAME OVER!!!!!!!!!!!!!!!!!!')
             print('TOTAL_SCORE=',self.score)
             print('TIME ALIVE=',time.time()-dooms)

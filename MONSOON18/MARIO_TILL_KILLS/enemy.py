@@ -2,7 +2,8 @@ from person import *
 import board
 import time
 import player
-import random
+import random,os
+import subprocess
 
 '''
 THE ENEMY INHERITS FROM THR PERSON CLASS , coordinates and alive status
@@ -21,14 +22,14 @@ class Enemy(Person):
         
         c1 = 0
         c2 = 0
-        if(board.screen[xc][yc]==' ' or board.screen[xc][yc]=='M'):
+        if(board.screen[xc][yc]==' ' or board.screen[xc][yc]=='M' or board.screen[xc][yc]=='+' or board.screen[xc][yc]=='/' or board.screen[xc][yc]== '\\' ):
             c1 = c1+1
-        if(board.screen[xc+1][yc]==' ' or board.screen[xc+1][yc]=='M'):
+        if(board.screen[xc+1][yc]==' ' or board.screen[xc+1][yc]=='M'  or board.screen[xc+1][yc]=='+'  or board.screen[xc+1][yc]=='/' or board.screen[xc+1][yc]=='\\'):
             c1 = c1+1
 
-        if(board.screen[xc][yc+1]==' ' or board.screen[xc][yc+1]=='M'):
+        if(board.screen[xc][yc+1]==' ' or board.screen[xc][yc+1]=='M' or board.screen[xc][yc+1]=='+' or board.screen[xc][yc+1]=='/' or board.screen[xc][yc+1]=='\\'):
             c2 = c2+1
-        if(board.screen[xc+1][yc+1]==' ' or board.screen[xc+1][yc+1]=='M'):
+        if(board.screen[xc+1][yc+1]==' ' or board.screen[xc+1][yc+1]=='M' or board.screen[xc+1][yc+1]=='+' or board.screen[xc+1][yc+1]=='/'or board.screen[xc+1][yc+1]=='\\'):
             c2 = c2+1
         
         if(direction == -1 and c1 == 2):
@@ -115,6 +116,7 @@ class Enemy(Person):
             self.isalive = 0
             playboy.kills = playboy.kills + 1
         if(check > 0):
+            do = subprocess.Popen(['aplay', 'mb_touch.wav'])
             return 1
         return 0
     

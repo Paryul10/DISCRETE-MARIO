@@ -44,3 +44,7 @@ def set_scene(bidi,scene,statics):
         sc.draw()
     for obj in statics:
         obj.draw()
+
+def set_coins(coins):
+    for coin in coins:
+        coin.draw()

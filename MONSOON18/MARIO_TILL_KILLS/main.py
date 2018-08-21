@@ -5,6 +5,7 @@ import player
 import enemy
 import config
 import objects
+import subprocess
 
 height = 40
 width = 60
@@ -20,11 +21,58 @@ scene = []
 statics = []
 statics_y = []
 en = []
+coins = []
+
+def make_coins():
+    coin = objects.Coins(height-19,32,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-19,33,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-20,54,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-20,52,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-7,79,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-11,141,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-11,142,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-11,143,1,1)
+    coins.append(coin)
+
+    coin = objects.Coins(height-23,173,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-23,174,1,1)
+    coins.append(coin)
+    
+    coin = objects.Coins(height-18,211,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-18,212,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-18,213,1,1)
+    coins.append(coin)
+
+    coin = objects.Coins(height-16,294,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-16,307,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-16,320,1,1)
+    coins.append(coin)
+    
+    coin = objects.Coins(height-7,330,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-11,334,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-15,338,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-19,342,1,1)
+    coins.append(coin)
+    coin = objects.Coins(height-23,346,1,1)
+    coins.append(coin)
 
 
 
-
-#cloud = objects.Cloud()
 def make_scene():
     for i in range(1,30):
         x = random.randint(2,height-18)
@@ -138,6 +186,9 @@ def spawn_enemy():
             fl=0
         #if(bidi[x][y] == 'M'):  #here you will see where the enemies not to be spawned -------FUTURE
             #fl=0
+    
+    if(board.screen[x][y]!=' ' or board.screen[x][y+1]!=' ' or board.screen[x+1][y]!=' ' or board.screen[x+1][y+1]!=' ' ):
+        fl = 0
 
     if(fl):
         ene = enemy.Enemy(x,y,1)
@@ -148,8 +199,10 @@ def spawn_enemy():
 make_scene()
 spawn_enemy()
 make_objects()
+make_coins()
 bidi.initialize()
 config.set_scene(bidi,scene,statics)
+config.set_coins(coins)
 bidi.set_score(playboy)
 os.system('clear')
 
@@ -158,7 +211,10 @@ start = time.time()
 dooms = start
 
 getch = config.GetchUnix()
-
+doi = subprocess.Popen(['mplayer', 'mario_08.wav'])
+os.system('clear')
+#os.system("start /home/zegatron/MONSOON18/MARIO_TILL_KILLS/resources/main_theme.ogg")
+time.sleep(2)
 while(True):
     
 #''' this part moves the enemy after every half second , checks player status ,enemy status ,initializes , sets player and enemies
@@ -169,13 +225,20 @@ while(True):
             spawn_enemy()
         for eni in en:
             eni.move_enemy(eni.xc,eni.yc,playboy.yc)
-            #playboy.check_player_alive(dooms,bidi)
+            playboy.check_player_alive(dooms,bidi,doi)
             chk = eni.check_enemy_alive(playboy)
             if(chk):
                 en.remove(eni)
 
+        # for coin in coins:
+        #     k = coin.check_coin()
+        #     if(k):
+        #         coins.remove(coin)
+            
+
         bidi.initialize()
         config.set_scene(bidi,scene,statics)
+        config.set_coins(coins)
         bidi.set_score(playboy)
         playboy.set_player(playboy.xc, playboy.yc)
         for eni in en:
@@ -195,23 +258,36 @@ while(True):
         prev = 1
     elif(inp == 'w'):
         #print("w")
-        playboy.jump(bidi,prev,en,playboy,dooms,scene,statics)
+        do = subprocess.Popen(['aplay', 'mb_jump.wav'])
+        playboy.jump(bidi,prev,en,playboy,dooms,scene,statics,coins,doi)
         prev = -1
 
     if(inp == 'q'):
-        print("q")
+        #print("q")
+        os.killpg(os.getpgid(doi.pid), signal.SIGTERM)
         sys.exit(0)
 
     
 #''' after input the positions change , we need to reset the board , set the new positions of player ,enemy ,, clear screen ,and print board'''
     bidi.initialize()
-    config.set_scene(bidi,scene,statics)    
+    config.set_scene(bidi,scene,statics)   
+    config.set_coins(coins)
     bidi.set_score(playboy)
     playboy.set_player(playboy.xc, playboy.yc)
     for eni in en:
         check = eni.check_enemy_alive(playboy)
         if(check):
             en.remove(eni)
+    # for coin in coins:
+    #     k = coin.check_coin()
+    #     print("k=",k)
+    #     time.sleep(.205)
+    #     print('yes-entered')
+    #     #time.sleep(.05)
+    #     if(k):
+    #         print('yes')
+    #         time.sleep(.05)
+    #         #coins.remove(coin) 
     for eni in en:
         eni.set_enemy(eni.xc, eni.yc)
     os.system('clear')
