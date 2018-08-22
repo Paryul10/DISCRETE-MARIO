@@ -224,7 +224,7 @@ class Mario(Person):
 
             xt = self.orgx
         
-            if(self.xc == bidi.height - 6 ):
+            if(self.xc >= bidi.height - 6 ):
                 if(board.screen[self.xc+2][self.yc]== ' ' and board.screen[self.xc+2][self.yc+1]==' '):
                     self.reduce_life(dooms,bidi,doi)
                 #self.reduce_life(dooms,bidi,doi)
@@ -276,8 +276,6 @@ class Mario(Person):
             chk = chk + 1
 
         if(chk>=1):
-            do = subprocess.Popen(['aplay', 'mb_die.wav']) 
-            os.system('clear')
             #os.killpg(os.getpgid(doi.pid), signal.SIGTERM)
             #doi = subprocess.Popen(['mplayer', 'mario_08.wav'])
             print(self._health)
@@ -285,6 +283,8 @@ class Mario(Person):
         return
 
     def reduce_life(self,dooms,bidi,doi):
+        do = subprocess.Popen(['aplay', 'mb_die.wav']) 
+        os.system('clear')
         if(self._health > 0):
             self._health = self._health -1
         if(self._health >0):
