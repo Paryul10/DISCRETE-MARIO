@@ -236,12 +236,6 @@ while(True):
             if(chk):
                 en.remove(eni)
 
-        # for coin in coins:
-        #     k = coin.check_coin()
-        #     if(k):
-        #         coins.remove(coin)
-            
-
         bidi.initialize()
         config.set_scene(bidi,scene,statics)
         config.set_coins(cns)
@@ -256,16 +250,22 @@ while(True):
     inp = config.input_char()
     if(inp == 'a'):
         #print("a")
-        playboy.move_player(0,-1,bidi)
+        if board.screen[playboy.xc+2][playboy.yc-1] == " " and board.screen[playboy.xc+2][playboy.yc] == " ":
+            playboy.jump(playboy,bidi,prev, en, statics, scene, cns,2,doi)
+        else:
+            playboy.move_left(bidi)
         prev = 0
     elif(inp == 'd'):
         #print("d")
-        playboy.move_player(0,1,bidi)
+        if board.screen[playboy.xc+2][playboy.yc+1] == " " and board.screen[playboy.xc+2][playboy.yc+2] == " ":
+            playboy.jump(playboy,bidi,prev, en, statics, scene, cns,3,doi)
+        else:
+            playboy.move_right(bidi)
         prev = 1
     elif(inp == 'w'):
         #print("w")
         do = subprocess.Popen(['aplay', 'mb_jump.wav'])
-        playboy.jump(bidi,prev,en,playboy,dooms,scene,statics,cns,doi)
+        playboy.jump(playboy,bidi,prev, en, statics, scene, cns,1,doi)
         prev = -1
 
     if(inp == 'q'):
@@ -282,6 +282,7 @@ while(True):
                 for coin in cns:
                     if(coin.xc == x and coin.yc == y):
                         cns.remove(coin)
+    
 #''' after input the positions change , we need to reset the board , set the new positions of player ,enemy ,, clear screen ,and print board'''
     bidi.initialize()
     config.set_scene(bidi,scene,statics)   

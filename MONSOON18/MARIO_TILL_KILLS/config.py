@@ -39,6 +39,19 @@ def input_char(timeout=1):
     signal.signal(signal.SIGALRM, signal.SIG_IGN)
     return ''
 
+def input_char_jump(timeout=0.1):
+    signal.signal(signal.SIGALRM, alarmHandler)
+    signal.setitimer(signal.ITIMER_REAL, timeout, timeout)
+    try:
+        text = getch()
+        signal.alarm(0)
+        return text
+    except AlarmException:
+        pass
+    signal.signal(signal.SIGALRM, signal.SIG_IGN)
+    return ''
+
+
 def set_scene(bidi,scene,statics):
     for sc in scene:
         sc.draw()

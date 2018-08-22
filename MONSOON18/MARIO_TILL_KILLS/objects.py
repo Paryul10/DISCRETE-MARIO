@@ -128,15 +128,15 @@ class Coins(Objects):
     def draw(self):
         board.screen[self.xc][self.yc] = '0'
 
-    def check_coin(self):
-        print(self.xc,self.yc)
-        time.sleep(.04)
-        if(board.screen[self.xc][self.yc-1]=='M' or board.screen[self.xc-1][self.yc]=='M' or  board.screen[self.xc-1][self.yc-1]=='M'):
-            print(self.xc,self.yc,"if ke andar")
-            time.sleep(.4)
-            board.screen[self.xc][self.yc] = ' '
-            return 1
-        return 0       
+    # def check_coin(self):
+    #     print(self.xc,self.yc)
+    #     time.sleep(.04)
+    #     if(board.screen[self.xc][self.yc-1]=='M' or board.screen[self.xc-1][self.yc]=='M' or  board.screen[self.xc-1][self.yc-1]=='M'):
+    #         print(self.xc,self.yc,"if ke andar")
+    #         time.sleep(.4)
+    #         board.screen[self.xc][self.yc] = ' '
+    #         return 1
+    #     return 0       
     
                     
     

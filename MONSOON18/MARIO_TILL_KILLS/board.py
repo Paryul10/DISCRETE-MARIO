@@ -49,7 +49,7 @@ class Board:
         screen[1][self.left+56] = ':'
         screen[1][self.left+57] = playboy.coins
         screen[1][self.left+48] = ':'
-        screen[1][self.left+49] = playboy.health
+        screen[1][self.left+49] = playboy._health
 
         screen[1][self.left+43] = 'L'
         screen[1][self.left+44] = 'I'
