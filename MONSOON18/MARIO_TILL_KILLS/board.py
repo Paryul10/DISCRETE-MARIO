@@ -1,6 +1,8 @@
 #from colorama import Fore , Back ,Style
 #import colors
 import random
+import time
+
 screen = [[' ' for x in range(910)] for y in range(40)]
 class Board:
 
@@ -29,7 +31,7 @@ class Board:
         screen[self.height-28][356] = '/'
         screen[self.height-29][357] = '|'
 
-    def set_score(self,playboy):
+    def set_score(self,playboy,dooms):
 
         screen[1][self.left+35] = 'K'
         screen[1][self.left+36] = 'I'
@@ -57,6 +59,19 @@ class Board:
         screen[1][self.left+46] = 'E'
         screen[1][self.left+47] = 'S'
 
+        screen[2][self.left+40] = 'T'
+        screen[2][self.left+41] = 'I'
+        screen[2][self.left+42] = 'M'
+        screen[2][self.left+43] = 'E'
+
+        screen[2][self.left+45] = 'L'
+        screen[2][self.left+46] = 'E'
+        screen[2][self.left+47] = 'F'
+        screen[2][self.left+48] = 'T'
+        
+        screen[2][self.left+49] = ':'
+        screen[2][self.left+50] = 360 - (round(time.time()-dooms))
+
     def render(self,playboy,en):
 
         # if(playboy.yc<=self.left+15):
@@ -82,6 +97,8 @@ class Board:
                     print("\033[1;37;40m" +screen[i][j],end =' ')
                 elif(screen[i][j]=='X'):
                     print("\033[1;33;40m" +screen[i][j],end =' ')
+                elif(screen[i][j] == '0'):
+                    print("\033[1;35;40m" +screen[i][j],end =' ')
                 else:
                     print(screen[i][j],end =' ')
             print()

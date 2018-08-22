@@ -22,14 +22,14 @@ class Enemy(Person):
         
         c1 = 0
         c2 = 0
-        if(board.screen[xc][yc]==' ' or board.screen[xc][yc]=='M' or board.screen[xc][yc]=='+' or board.screen[xc][yc]=='/' or board.screen[xc][yc]== '\\' ):
+        if(board.screen[xc][yc]==' ' or board.screen[xc][yc]=='M' or board.screen[xc][yc]=='+' or board.screen[xc][yc]=='/' or board.screen[xc][yc]== '\\' or board.screen[xc][yc]=='0' ):
             c1 = c1+1
-        if(board.screen[xc+1][yc]==' ' or board.screen[xc+1][yc]=='M'  or board.screen[xc+1][yc]=='+'  or board.screen[xc+1][yc]=='/' or board.screen[xc+1][yc]=='\\'):
+        if(board.screen[xc+1][yc]==' ' or board.screen[xc+1][yc]=='M'  or board.screen[xc+1][yc]=='+'  or board.screen[xc+1][yc]=='/' or board.screen[xc+1][yc]=='\\' or board.screen[xc+1][yc]=='0'):
             c1 = c1+1
 
-        if(board.screen[xc][yc+1]==' ' or board.screen[xc][yc+1]=='M' or board.screen[xc][yc+1]=='+' or board.screen[xc][yc+1]=='/' or board.screen[xc][yc+1]=='\\'):
+        if(board.screen[xc][yc+1]==' ' or board.screen[xc][yc+1]=='M' or board.screen[xc][yc+1]=='+' or board.screen[xc][yc+1]=='/' or board.screen[xc][yc+1]=='\\' or board.screen[xc][yc+1]=='0'):
             c2 = c2+1
-        if(board.screen[xc+1][yc+1]==' ' or board.screen[xc+1][yc+1]=='M' or board.screen[xc+1][yc+1]=='+' or board.screen[xc+1][yc+1]=='/'or board.screen[xc+1][yc+1]=='\\'):
+        if(board.screen[xc+1][yc+1]==' ' or board.screen[xc+1][yc+1]=='M' or board.screen[xc+1][yc+1]=='+' or board.screen[xc+1][yc+1]=='/'or board.screen[xc+1][yc+1]=='\\' or board.screen[xc+1][yc+1]=='0'):
             c2 = c2+1
         
         if(direction == -1 and c1 == 2):
@@ -50,7 +50,7 @@ class Enemy(Person):
         checking_right = self.check_empty(xc,yc,1)
         return checking_right
  
-    def move_enemy(self,xc,yc,playery):
+    def _move_enemy(self,xc,yc,playery):
         
         if(self.yc > playery):
             #print('entered')
@@ -109,7 +109,7 @@ class Enemy(Person):
 
     ###############################-------------------------------COLLISION----------------------------------###################
 
-    def check_enemy_alive(self,playboy):
+    def _check_enemy_alive(self,playboy):
         check = 0
         if(board.screen[self.xc][self.yc] == 'M' or board.screen[self.xc][self.yc+1]=='M'):
             check = check + 1

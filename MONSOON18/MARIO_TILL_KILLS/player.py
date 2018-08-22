@@ -28,12 +28,12 @@ class Mario(Person):
         #     self.yc = bidi.left
     def move_left(self, bidi):
         if (self.yc >= (bidi.left+7)):
-            if board.screen[self.xc][self.yc-1] == " " or board.screen[self.xc][self.yc-1] == "/" or board.screen[self.xc][self.yc-1] == "\\" or board.screen[self.xc][self.yc-1] == "c" or board.screen[self.xc][self.yc-1] == "0":
+            if board.screen[self.xc][self.yc-1] == " " or board.screen[self.xc][self.yc-1] == "/" or board.screen[self.xc][self.yc-1] == "\\" or board.screen[self.xc][self.yc-1] == "c" or board.screen[self.xc][self.yc-1] == "0" or board.screen[self.xc][self.yc-1] == "+":
                 self.yc = self.yc -1
     
     def move_right(self,bidi):
         if (self.yc <= (bidi.left+(3/4)*bidi.width)):
-            if board.screen[self.xc][self.yc+2] == " " or board.screen[self.xc][self.yc+2] == "/" or board.screen[self.xc][self.yc+2] == "\\" or board.screen[self.xc][self.yc+2] == "c" or board.screen[self.xc][self.yc+2] == "0":
+            if board.screen[self.xc][self.yc+2] == " " or board.screen[self.xc][self.yc+2] == "/" or board.screen[self.xc][self.yc+2] == "\\" or board.screen[self.xc][self.yc+2] == "c" or board.screen[self.xc][self.yc+2] == "0" or board.screen[self.xc][self.yc+2] == "+":
                 self.yc = self.yc + 1
 
 
@@ -61,9 +61,9 @@ class Mario(Person):
     #         if(time.time() - start > .5):
     #             start = time.time()
     #             for enemy in en:
-    #                 enemy.move_enemy(enemy.xc,enemy.yc, playboy.yc)
-    #                 self.check_player_alive(dooms,bidi,doi)
-    #                 chek = enemy.check_enemy_alive(self)
+    #                 enemy._move_enemy(enemy.xc,enemy.yc, playboy.yc)
+    #                 self._check_player_alive(dooms,bidi,doi)
+    #                 chek = enemy._check_enemy_alive(self)
     #                 if(chek == 1):
     #                     #do = subprocess.Popen(['aplay', 'mb_touch.wav'])                        
     #                     en.remove(enemy)
@@ -80,7 +80,7 @@ class Mario(Person):
     #             self.yc = self.yc - speedy
     #         elif(prev == 1):
     #             self.yc = self.yc + speedy
-    def jump(self, playboy,bidi, prev,en, statics, scene, cns,fle,doi):
+    def jump(self, playboy,bidi, prev,en, statics, scene, cns,fle,doi,dooms):
         speedx = 2
         speedy = 0
         if(fle == 2):
@@ -223,6 +223,13 @@ class Mario(Person):
             self.yc = self.yc + speedy
 
             xt = self.orgx
+        
+            if(self.xc == bidi.height - 6 ):
+                if(board.screen[self.xc+2][self.yc]== ' ' and board.screen[self.xc+2][self.yc+1]==' '):
+                    self.reduce_life(dooms,bidi,doi)
+                #self.reduce_life(dooms,bidi,doi)
+            
+
 
             
             for i in range(0,2):
@@ -230,6 +237,7 @@ class Mario(Person):
                     x = playboy.xc + i
                     y = playboy.yc + j
                     if(board.screen[x][y] == '0'):
+                        do = subprocess.Popen(['aplay', 'mb_coin.wav'])
                         playboy.coins = playboy.coins + 1
                         for coin in cns:
                             if(coin.xc == x and coin.yc == y):
@@ -238,7 +246,7 @@ class Mario(Person):
             bidi.initialize()
             config.set_scene(bidi,scene,statics)
             config.set_coins(cns)        
-            bidi.set_score(playboy)
+            bidi.set_score(playboy,dooms)
             self.set_player(self.xc,self.yc)
             for enemy in en:
                 enemy.set_enemy(enemy.xc,enemy.yc)
@@ -260,7 +268,7 @@ class Mario(Person):
             for j in range(0,2):
                 board.screen[xc+i][yc+j] = 'M'
     ######################---------------------------------IS_PLAYER_ALIVE/IS_GAME_OVER--------------########################
-    def check_player_alive(self,dooms,bidi,doi):
+    def _check_player_alive(self,dooms,bidi,doi):
         chk = 0
         if(board.screen[self.xc][self.yc] == 'e' and board.screen[self.xc+1][self.yc] == 'e'):
             chk = chk + 1
@@ -268,10 +276,11 @@ class Mario(Person):
             chk = chk + 1
 
         if(chk>=1):
-            #do = subprocess.Popen(['aplay', 'mb_die.wav']) 
+            do = subprocess.Popen(['aplay', 'mb_die.wav']) 
+            os.system('clear')
             #os.killpg(os.getpgid(doi.pid), signal.SIGTERM)
             #doi = subprocess.Popen(['mplayer', 'mario_08.wav'])
-            print(self.health)
+            print(self._health)
             self.reduce_life(dooms,bidi,doi)
         return
 
@@ -282,7 +291,9 @@ class Mario(Person):
             #print(self.orgx,self.orgy)
             #time.sleep(1)
             self.xc = self.orgx 
-            self.yc = self.orgy + bidi.left
+            for i in range (bidi.width):
+                if(board.screen[self.xc][bidi.left+i]==' ' and board.screen[self.xc][bidi.left+i+1]==' '):
+                    self.yc = i + bidi.left
         elif self._health == 0:
             self.check_game_over(dooms,doi)
 
@@ -290,8 +301,8 @@ class Mario(Person):
             #os.killpg(os.getpgid(doi.pid), signal.SIGTERM)
             os.system('clear')
             print('GAME OVER!!!!!!!!!!!!!!!!!!')
-            print('TOTAL_SCORE=',self.score)
-            print('TIME ALIVE=',time.time()-dooms)
+            print('TOTAL_SCORE=',self.score+self.coins*10+self.kills*100+((360-(round(time.time()-dooms)))*10))
+            print('TIME ALIVE=',round(time.time()-dooms))
             sys.exit(0)
 
     

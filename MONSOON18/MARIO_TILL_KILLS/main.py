@@ -178,7 +178,7 @@ def make_objects():
     br = objects.Bricks(height-24, 348, 2, 2)
     statics.append(br)
 
-    f = objects.Pipe(height-28,     357, 24, 1)
+    f = objects.Pipe(height-28,357, 24, 1)
     statics.append(f)
 
 ##########################-------------------SPAWNS-ENEMY WHEN CALLED--------------------------######################
@@ -194,6 +194,9 @@ def spawn_enemy():
     
     if(board.screen[x][y]!=' ' or board.screen[x][y+1]!=' ' or board.screen[x+1][y]!=' ' or board.screen[x+1][y+1]!=' ' ):
         fl = 0
+    
+    if(board.screen[x][y]==' ' and board.screen[x][y]==' ' and board.screen[x+2][y]==' ' and board.screen[x+2][y]==' '):
+        fl = 0
 
     if(fl):
         ene = enemy.Enemy(x,y,1)
@@ -201,6 +204,8 @@ def spawn_enemy():
     else:
         spawn_enemy()
 
+start = time.time()
+dooms = start   
 make_scene()
 spawn_enemy()
 make_objects()
@@ -208,19 +213,18 @@ make_coins()
 bidi.initialize()
 config.set_scene(bidi,scene,statics)
 config.set_coins(cns)
-bidi.set_score(playboy)
+bidi.set_score(playboy,dooms)
 #os.system('clear')
 
 prev = -1 
-start = time.time()
-dooms = start
+
 
 getch = config.GetchUnix()
 #doi = subprocess.Popen(['mplayer', 'mario_08.wav'])
 doi = 1
 #os.system('clear')
 #os.system("start /home/zegatron/MONSOON18/MARIO_TILL_KILLS/resources/main_theme.ogg")
-time.sleep(2)
+#time.sleep(2)
 while(True):
     
 #''' this part moves the enemy after every half second , checks player status ,enemy status ,initializes , sets player and enemies
@@ -230,16 +234,18 @@ while(True):
         if(len(en) < 2):
             spawn_enemy()
         for eni in en:
-            eni.move_enemy(eni.xc,eni.yc,playboy.yc)
-            #playboy.check_player_alive(dooms,bidi,doi)
-            chk = eni.check_enemy_alive(playboy)
+            eni._move_enemy(eni.xc,eni.yc,playboy.yc)
+            playboy._check_player_alive(dooms,bidi,doi)
+            chk = eni._check_enemy_alive(playboy)
+            if(board.screen[eni.xc+2][eni.yc]==' ' and board.screen[eni.xc+2][eni.yc]==' '):
+                en.remove(eni)
             if(chk):
                 en.remove(eni)
 
         bidi.initialize()
         config.set_scene(bidi,scene,statics)
         config.set_coins(cns)
-        bidi.set_score(playboy)
+        bidi.set_score(playboy,dooms)
         playboy.set_player(playboy.xc, playboy.yc)
         for eni in en:
             eni.set_enemy(eni.xc, eni.yc)
@@ -251,21 +257,22 @@ while(True):
     if(inp == 'a'):
         #print("a")
         if board.screen[playboy.xc+2][playboy.yc-1] == " " and board.screen[playboy.xc+2][playboy.yc] == " ":
-            playboy.jump(playboy,bidi,prev, en, statics, scene, cns,2,doi)
+            playboy.jump(playboy,bidi,prev, en, statics, scene, cns,2,doi,dooms)
         else:
             playboy.move_left(bidi)
         prev = 0
     elif(inp == 'd'):
         #print("d")
         if board.screen[playboy.xc+2][playboy.yc+1] == " " and board.screen[playboy.xc+2][playboy.yc+2] == " ":
-            playboy.jump(playboy,bidi,prev, en, statics, scene, cns,3,doi)
+            playboy.jump(playboy,bidi,prev, en, statics, scene, cns,3,doi,dooms)
         else:
             playboy.move_right(bidi)
         prev = 1
     elif(inp == 'w'):
         #print("w")
         do = subprocess.Popen(['aplay', 'mb_jump.wav'])
-        playboy.jump(playboy,bidi,prev, en, statics, scene, cns,1,doi)
+        os.system('clear')
+        playboy.jump(playboy,bidi,prev, en, statics, scene, cns,1,doi,dooms)
         prev = -1
 
     if(inp == 'q'):
@@ -278,6 +285,8 @@ while(True):
             x = playboy.xc + i
             y = playboy.yc + j
             if(board.screen[x][y] == '0'):
+                do = subprocess.Popen(['aplay', 'mb_coin.wav'])
+                os.system('clear')
                 playboy.coins = playboy.coins+1
                 for coin in cns:
                     if(coin.xc == x and coin.yc == y):
@@ -287,12 +296,12 @@ while(True):
     bidi.initialize()
     config.set_scene(bidi,scene,statics)   
     
-    bidi.set_score(playboy)
+    bidi.set_score(playboy,dooms)
     config.set_coins(cns)
     
     playboy.set_player(playboy.xc, playboy.yc)
     for eni in en:
-        check = eni.check_enemy_alive(playboy)
+        check = eni._check_enemy_alive(playboy)
         if(check):
             en.remove(eni)
             
@@ -300,3 +309,18 @@ while(True):
         eni.set_enemy(eni.xc, eni.yc)
     os.system('clear')
     bidi.render(playboy,en)
+
+    if(360 - (round(time.time()-dooms)) < 0):
+        os.system('clear')
+        print('OUT OF TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        time.sleep(1)
+        playboy.check_game_over(dooms,doi)
+
+    if(playboy.yc >= 357):
+        os.system('clear')
+        print('HOOOOOOOOOOOOOOORAY!!!!!!!')
+        print('YOUUUUUUUUUUUUUUUUUUUUUUUUUUU WON!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        time.sleep(1)
+        playboy.check_game_over(dooms,doi)
+        
+
